@@ -2,61 +2,50 @@
 # py -m venv step1
 # step1\Scripts\activate
 # python -m pip install --upgrade pip
-# pip install numpy
+# pip install numpy scipy matplotlib sklearn
 # pip freeze
 # 実行
-# python step1_03.py
+# python step1_02.py
 # 終了
 # step1\Scripts\deactivate
-# https://www.geisya.or.jp/~mwm48961/linear_algebra/eigenvalue2.htm
 import numpy as np
-import numpy.linalg as LA # linalgモジュールはLAとしてimportするのが慣例
-from numpy.linalg import solve
+import matplotlib.pyplot as plt
+from scipy import stats
 """
-連立方程式を解く
-2x + 3y = 16
- x + 7y = 19
+線形回帰
 """
-left = [[2, 3],
-        [1, 7]]
- 
-right = [16, 19]
-x = solve(left, right)[0]
-y = solve(left, right)[1]
-print(f"連立方程式の答\nx={x},y={y}")
+x = [5,7,8,7,2,17,2,9,4,11,12,9,6]
+y = [99,86,87,88,111,86,103,87,94,78,77,85,86]
 
-"""
-NumPy行列作成
-"""
-np_arr = np.array([[1, 2], [3, 4]])
-print("行列\n",np_arr)
-"""
-行列式計算
-"""
-print("行列式の値\n",LA.det(np_arr))
-"""
-転置行列
-"""
-print("転置行列\n",np_arr.T)
+slope, intercept, r, p, std_err = stats.linregress(x, y)
+# use of function
+#def myfunc(x):
+#  return slope * x + intercept
+#mymodel = list(map(myfunc, x))
+# use of lambda function
+mymodel = list(map(lambda x: slope * x + intercept, x))
+mymodel = tuple(map(lambda x: slope * x + intercept, x))
 
+plt.scatter(x, y)
+plt.plot(x, mymodel)
+plt.show()
 """
-逆行列
+多項式回帰
 """
-print("逆行列\n",LA.inv(np_arr))
+x = [1,2,3,5,6,7,8,9,10,12,13,14,15,16,18,19,21,22]
+y = [100,90,80,60,60,55,60,65,70,70,75,76,78,79,90,99,99,100]
 
-"""
-実行列の固有値・固有ベクトルの計算
-"""
-A_matrix=np.array([[1,2],[-1,4]]) # 行列Aを生成
-#A_matrix=np.matrix([[1,2],[4,3]]) # 行列Aを生成
-#A_matrix=np.matrix([[1,2],[3,2]]) # 行列Aを生成
-#A_matrix=np.array([[1,1,2],[0,2,-1],[0,0,3]]) # 行列Aを生成
-#A_matrix=np.matrix([[0,-1,0],[-1,0,0],[0,3,2]]) # 行列Aを生成
+mymodel = np.poly1d(np.polyfit(x, y, 3))
 
-print("行列\n",A_matrix)
-print("逆行列\n",LA.inv(A_matrix))
-eig_val, eig_vec = LA.eig(A_matrix) # 固有値・固有ベクトルをそれぞれeig_val, eig_vecに格納する
+myline = np.linspace(1, 22, 100)
 
-#計算結果の出力
-print ("固有値\n",eig_val) 
-print("固有ベクトル\n",eig_vec)
+plt.scatter(x, y)
+plt.plot(myline, mymodel(myline))
+plt.show()
+# The r-squared value ranges from 0 to 1, where 0 means no relationship, and 1 means 100% related.
+from sklearn.metrics import r2_score
+print(r2_score(y, mymodel(x)))
+"""
+重回帰分析
+"""
+# 重回帰の例は未作成

@@ -11,18 +11,22 @@
 import matplotlib.pyplot as plt
 from scipy import stats
 """
-線形回帰
+ランダムデータの作成とデータの分布
 """
-x = [5,7,8,7,2,17,2,9,4,11,12,9,6]
-y = [99,86,87,88,111,86,103,87,94,78,77,85,86]
+import numpy as np
+import matplotlib.pyplot as plt
+# ヒストグラム
+x = np.random.uniform(0.0, 5.0, 100000)
+plt.hist(x, 10)
+plt.show()
+# ガウス分布（正規分布）
+y = np.random.normal(5.0, 1.0, 100000)
 
-slope, intercept, r, p, std_err = stats.linregress(x, y)
+plt.hist(y, 100)
+plt.show()
+# 散布図
+a = np.random.normal(5.0, 1.0, 1000)
+b = np.random.normal(10.0, 2.0, 1000)
 
-def myfunc(x):
-  return slope * x + intercept
-
-mymodel = list(map(myfunc, x))
-
-plt.scatter(x, y)
-plt.plot(x, mymodel)
+plt.scatter(a, b)
 plt.show()
